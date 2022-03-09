@@ -1,6 +1,26 @@
 #map {
   min-height: 180px;
   min-width: 400px;
-  height: 90vh;
+  height: 100vh;
   width: 100vw;
+}
+
+.legend-info {
+  height: auto;
+  width: 350px;;
+  z-index: 401;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  
+  &__unit {
+    background-color: rgba(0, 68, 255, 0.356);
+    padding: 1rem;
+    border-radius: 10px;
+    border: solid 1px;
+  }
+
+  &__box {
+    
+  }
 }
