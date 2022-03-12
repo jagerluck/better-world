@@ -1,17 +1,19 @@
-export const getColor = (v: number) => {
-  return v > 1000
-    ? '#800026'
-    : v > 500
-    ? '#BD0026'
-    : v > 200
-    ? '#E31A1C'
-    : v > 100
-    ? '#FC4E2A'
-    : v > 50
-    ? '#FD8D3C'
-    : v > 20
-    ? '#FEB24C'
-    : v > 10
-    ? '#FED976'
-    : '#FFEDA0';
+export const getColor = (v?: number) => {
+  const color = !v ? Math.random() * 500 : v;
+
+  return color > 1000
+    ? 'rgb(8, 0, 80)'
+    : color > 500
+    ? 'rgb(11, 0, 114)'
+    : color > 200
+    ? 'rgb(72, 54, 236)'
+    : color > 100
+    ? 'rgb(83, 64, 253)'
+    : color > 50
+    ? 'rgb(92, 116, 255)'
+    : color > 20
+    ? 'rgb(131, 150, 255)'
+    : color > 10
+    ? 'rgb(164, 155, 252)'
+    : 'rgb(179, 170, 255)';
 };

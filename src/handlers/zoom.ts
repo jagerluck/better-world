@@ -1,10 +1,43 @@
 import L from 'leaflet';
+import { defaultFeatureStyle } from '../consts';
+import { getColor } from '../helpers';
+import { Store } from '../store/store';
 
-type ZoomToEvent = {
-  e: L.ZoomAnimEvent;
-  map: L.Map;
+const highlightFeatureStyle = {
+  weight: 3,
+  color: '#f0ff28',
+  dashArray: '',
+  fillOpacity: 0.6,
 };
 
-export const zoomToEvent = ({ e, map }: ZoomToEvent) => {
-  console.log(e.propagatedFrom);
+export const featureStyle = {
+  fillColor: getColor(), // TODO: feature?.properties.damageDone API call
+ ...defaultFeatureStyle,
+};
+
+export const zoomToFeature = (e: any) => {
+  const map = Store.map;
+
+  map.fitBounds(e.target.getBounds());
+};
+
+const highlightFeature = (e: L.LeafletMouseEvent) => {
+  const feature = e.target;
+  feature.setStyle(highlightFeatureStyle);
+  if (!L.Browser.ie && !L.Browser.opera) {
+    feature.bringToFront();
+  }
+};
+
+const resetHighlight = (e: L.LeafletMouseEvent) => {
+  const feature = e.target;
+  feature.setStyle(featureStyle);
+};
+
+export const onEachFeature = (feature: any, layer: any) => {
+  layer.on({
+    mouseover: highlightFeature,
+    mouseout: resetHighlight,
+    click: zoomToFeature,
+  });
 };

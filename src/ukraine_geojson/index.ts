@@ -1,7 +1,10 @@
-import Dnipropetrovsk from './Dnipropetrovsk.json';
+import regionsRaw from './ukraine_regions.json';
 
-const regions = {
-  Dnipropetrovsk,
-} as Record<string, GeoJSON.GeoJsonObject>;
+const regions: GeoJSON.FeatureCollection = {
+  type: "FeatureCollection",
+  features: [],
+}
+
+Object.assign(regions, regionsRaw);
 
 export default regions;
