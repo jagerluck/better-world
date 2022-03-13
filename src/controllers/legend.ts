@@ -7,21 +7,23 @@ export function setupMapLegend() {
 
   let div = L.DomUtil.create('div', 'legend-info__unit'),
     grades = [0, 10, 20, 50, 100, 200, 500, 1000], // TODO: API
-    labels = [],
+    html = [],
     from,
     to;
+
+  html.push('<h3>Lorem</h3>');
 
   for (let i = 0; i < grades.length; i++) {
     from = grades[i];
     to = grades[i + 1];
 
-    labels.push(
-      `<div className="legend-info__box"><p style="background: ${getColor(
+    html.push(
+      `<p style="line-height: 1.6rem; font-size: 0.9rem; margin: 0;"><span style="margin-right: .5rem; padding: 0.75rem; background: ${getColor(
         from + 1
-      )}">${to ? `${from} - ${to}` : `${from} +`}</p></div>`
+      )}"></span>${to ? `${from} - ${to}` : `${from} +`}</p>`
     );
   }
-  div.innerHTML = labels.join('');
+  div.innerHTML = html.join('');
   legendInfo.appendChild(div);
 
   const legend = L.DomUtil.get(legendId);

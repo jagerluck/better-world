@@ -6,10 +6,12 @@ import { handleMarkerClick, onEachFeature } from '../handlers';
 import { getColor } from '../helpers';
 import { defaultFeatureStyle } from '../consts';
 
+const store = new Store();
+
 export const initialize = () => {
-  const store = new Store();
   const map = Store.map;
 
+  // map settings
   // Open Street
   const osm = L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -17,10 +19,8 @@ export const initialize = () => {
       maxZoom: 19,
       attribution:
         '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>',
-      tileSize: 512,
     }
   );
-
   // Satelite Layer
   const googleSatellite = L.tileLayer(
     'http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
@@ -29,7 +29,6 @@ export const initialize = () => {
       subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
     }
   );
-
   // Google Streets
   const googleStreets = L.tileLayer(
     'http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
@@ -38,28 +37,17 @@ export const initialize = () => {
       subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
     }
   );
-
   const baseLayers = {
     Satellite: googleSatellite,
     GoogleMap: googleStreets,
     OpenStreetMap: osm,
   };
-
   googleStreets.addTo(map);
   googleSatellite.addTo(map);
   osm.addTo(map);
   L.control.layers(baseLayers).addTo(map);
 
-  L.marker([49, 33]).addTo(map); // add Pin to the map
-  // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  //   attribution:
-  //     '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>',
-  // }).addTo(map);
-
-  // additional
   setupMapLegend();
-
-  console.group(regions);
 
   L.geoJSON(regions, {
     style: (feature) => {
@@ -71,5 +59,8 @@ export const initialize = () => {
     },
     onEachFeature,
   }).addTo(map);
-  map.on('click', handleMarkerClick);
-};
+
+  L.marker([49, 33]).addTo(map).addEventListener('click', handleMarkerClick);
+  
+  map.on('click', () => { return;});
+};;

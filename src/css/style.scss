@@ -1,3 +1,7 @@
+body {
+  font-family: Geneva, Tahoma, Verdana, sans-serif
+}
+
 #map {
   min-height: 180px;
   min-width: 400px;
@@ -12,6 +16,8 @@
   position: absolute;
   right: 0;
   bottom: 0;
+  color: rgb(24, 24, 24);
+  text-shadow: 1px 1px 0px rgb(255, 255, 255);
   
   &__unit {
     background-color: rgba(0, 68, 255, 0.356);
@@ -20,7 +26,21 @@
     border: solid 1px;
   }
 
+  &__box {
+    filter: scale(2);
+
+    > p {
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+
   &__boxx { // fictive class to play with colors
     background-color: rgb(164, 155, 252);
   }
+}
+
+.leaflet-marker-icon {
+  // it's a .png file
 }
