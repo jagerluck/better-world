@@ -6,7 +6,8 @@ import { handleMarkerClick, onEachFeature } from '../handlers';
 import { getColor } from '../helpers';
 import { defaultFeatureStyle } from '../consts';
 
-const store = new Store();
+// initialize map
+new Store();
 
 export const initialize = () => {
   const map = Store.map;
@@ -61,6 +62,8 @@ export const initialize = () => {
   }).addTo(map);
 
   L.marker([49, 33]).addTo(map).addEventListener('click', handleMarkerClick);
-  
-  map.on('click', () => { return;});
-};;
+
+  map.on('click', (e: any) => {
+    console.log(e);
+  });
+};
