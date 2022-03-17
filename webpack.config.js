@@ -1,5 +1,6 @@
 const { resolve } = require('path');
-
+// const Dotenv = require('dotenv-webpack');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 // const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -14,6 +15,11 @@ module.exports = {
   },
   resolve: {
     extensions: ['.ts', '.js', '.json', '.geojson'],
+    fallback: {
+      os: false,
+      path: false,
+      fs: false,
+    },
   },
   module: {
     rules: [
@@ -45,12 +51,16 @@ module.exports = {
     ],
   },
   plugins: [
+    // new Dotenv(),
     new ProgressBarPlugin(),
     new HtmlWebpackPlugin({
       template: `${__dirname}/src/index.html`,
       filename: 'index.html',
       inject: 'body',
     }),
+    new webpack.DefinePlugin({
+      'process.env': JSON.stringify(process.env),
+    })
   ],
   devServer: {
     hot: true,
