@@ -16,6 +16,7 @@
   "devDependencies": {
     "cross-env": "^7.0.3",
     "css-loader": "^6.7.0",
+    "dotenv": "^16.0.0",
     "extract-css-chunks-webpack-plugin": "^4.9.0",
     "file-loader": "^6.2.0",
     "fork-ts-checker-webpack-plugin": "^7.2.1",
