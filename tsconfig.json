@@ -2,6 +2,7 @@
   "compilerOptions": {
     "outDir": "dist",
     "target": "ESNext",
+    "moduleResolution": "node",
     "useDefineForClassFields": true,
     "lib": [
       "DOM",
@@ -15,17 +16,25 @@
     "forceConsistentCasingInFileNames": true,
     "sourceMap": true,
     "experimentalDecorators": true,
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
     "isolatedModules": true,
     "noEmitHelpers": true,
     "resolveJsonModule": true,
+    "types": [
+      "node"
+    ],
+    "typeRoots": [
+      "node_modules/@types"
+    ]
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
   },
   // "include": [
-  //   "src"
+  //   "src/**/*.ts"
   // ],
-  "exclude": [
-    "node_modules"
-  ],
+  // "exclude": [
+  //   "node_modules"
+  // ],
 }

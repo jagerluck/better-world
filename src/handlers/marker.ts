@@ -12,6 +12,8 @@ export const handleMarkerClick = (e: L.LeafletMouseEvent) => {
   const id = 0; // TODO
   const store = new Store();
   const loadedPin = store.getById(id);
+  const slider = document.getElementById('slider');
+  console.log(slider);
 
   const div = document.createElement('div');
   Object.assign(div, {

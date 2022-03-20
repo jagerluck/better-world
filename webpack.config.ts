@@ -1,16 +1,17 @@
-const { resolve } = require('path');
-// const Dotenv = require('dotenv-webpack');
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ProgressBarPlugin = require('progress-bar-webpack-plugin');
+import * as Dotenv from 'dotenv-webpack';
+import * as path from 'path';
+import * as webpack from 'webpack';
+import * as HtmlWebpackPlugin from 'html-webpack-plugin';
+import * as ProgressBarPlugin from 'progress-bar-webpack-plugin';
+import 'webpack-dev-server';
 // const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-module.exports = {
+const config: webpack.Configuration = {
   mode: 'development',
   context: __dirname,
   entry: './src/app.ts',
   output: {
-    path: resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'dist'),
     filename: 'app.js',
   },
   resolve: {
@@ -30,7 +31,6 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        // test: /\.scss$/i,
         use: [
           // fallback to style-loader in development
           // process.env.NODE_ENV !== 'production'
@@ -48,20 +48,18 @@ module.exports = {
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
         type: 'asset/resource',
-      }
+      },
     ],
   },
   plugins: [
-    // new Dotenv(),
-    new ProgressBarPlugin(),
     new HtmlWebpackPlugin({
       template: `${__dirname}/src/index.html`,
       filename: 'index.html',
       inject: 'body',
     }),
-    new webpack.DefinePlugin({
-      'process.env': JSON.stringify(process.env),
-    })
+    new Dotenv(),
+    //@ts-ignore
+    new ProgressBarPlugin(),
   ],
   devServer: {
     hot: true,
@@ -73,3 +71,5 @@ module.exports = {
     noEmitOnErrors: true,
   },
 };
+
+export default config;

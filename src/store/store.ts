@@ -3,7 +3,7 @@ import { mapId } from '../consts';
 // import rawRegions from '../ukraine_geojson';
 
 export class Store {
-  state: Record<string, any> = {};
+  state: Record<string, any> = { pins: [] };
   // regions: {};
   static map: L.Map;
 
@@ -24,14 +24,14 @@ export class Store {
     if (this.state.pins[id]) {
       return this.state.pins[id]; 
     }
-
-    try {
-      const pin = await fetch(`${process.env.API}/${id}`);
-      this.state.pins[id] = pin;
+    return;
+    // try {
+    //   const pin = await fetch(`${process.env.API}/${id}`);
+    //   this.state.pins[id] = pin;
       
-      return pin;
-    } catch(err) {
-      console.error(err);
-    }
+    //   return pin;
+    // } catch(err) {
+    //   console.error(err);
+    // }
   }
 }
