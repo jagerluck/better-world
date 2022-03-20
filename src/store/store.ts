@@ -3,7 +3,7 @@ import { mapId } from '../consts';
 // import rawRegions from '../ukraine_geojson';
 
 export class Store {
-  state: Record<string, any> = {};
+  state: Record<string, any> = { pins: [] };
   // regions: {};
   static map: L.Map;
 
