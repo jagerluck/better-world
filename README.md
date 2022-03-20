@@ -9,3 +9,5 @@ Current backlog:
   - custom icons, correct popup position;
 
   - API;
+
+  - popup photo/video layout

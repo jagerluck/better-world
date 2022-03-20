@@ -19,4 +19,19 @@ export class Store {
       });
     }
   }
+
+  async getById(id: number) {
+    if (this.state.pins[id]) {
+      return this.state.pins[id]; 
+    }
+
+    try {
+      const pin = await fetch(`${process.env.API}/${id}`);
+      this.state.pins[id] = pin;
+      
+      return pin;
+    } catch(err) {
+      console.error(err);
+    }
+  }
 }
