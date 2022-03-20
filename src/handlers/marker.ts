@@ -1,6 +1,13 @@
 import L from 'leaflet';
 import { Store } from '../store/store';
 
+/* 
+steps when open Pin:
+  - keep id of the pin, mb through data attr;
+  - check store for pin data by it's id, if none - call API;
+  - open popup slider with scrollable video or photo
+*/
+
 export const handleMarkerClick = (e: L.LeafletMouseEvent) => {
   const id = 0; // TODO
   const store = new Store();
@@ -26,6 +33,6 @@ export const handleMarkerClick = (e: L.LeafletMouseEvent) => {
 
   L.popup({ autoClose: true, autoPan: true })
     .setLatLng(e.latlng)
-    .setContent('You clicked the map at ' + e.latlng)
+    .setContent(div)
     .openOn(Store.map);
 };

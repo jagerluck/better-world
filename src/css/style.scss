@@ -1,3 +1,5 @@
+@import './slider.scss';
+
 body {
   font-family: Geneva, Tahoma, Verdana, sans-serif
 }
@@ -43,4 +45,16 @@ body {
 
 .leaflet-marker-icon .standard {
   // it's a .png file
+}
+
+.card {
+  /* other
+     styles */
+  opacity: 0;
+  pointer-events: none;
+}
+
+.card.view { /* when the card contains .view */
+  opacity: 1;
+  pointer-events: all;
 }

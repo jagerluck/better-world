@@ -57,9 +57,6 @@ const config: webpack.Configuration = {
       filename: 'index.html',
       inject: 'body',
     }),
-    // new webpack.DefinePlugin({
-    //   'process.env.ENV': JSON.stringify(process.env.ENV),
-    // }),
     new Dotenv(),
     //@ts-ignore
     new ProgressBarPlugin(),
