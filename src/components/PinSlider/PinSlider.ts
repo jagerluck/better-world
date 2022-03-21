@@ -87,6 +87,7 @@ export class PinSlider<T> {
     if (!cache.cached) {
       const sliderWrap = document.createElement('div');
       const afterImgWrap = document.createElement('div');
+      const beforeImgWrap = document.createElement('div');
       const sliderBtn = document.createElement('div');
       const beforeImage = document.createElement('img');
       const afterImage = document.createElement('img');
@@ -96,6 +97,7 @@ export class PinSlider<T> {
       afterImage.className = 'after-img';
       sliderBtn.className = 'slider-btn';
       afterImgWrap.className = 'after-img-wrap';
+      beforeImgWrap.className = 'before-img-wrap';
 
       beforeImage.src = beforeImg;
       afterImage.src = afterImg;
@@ -104,11 +106,8 @@ export class PinSlider<T> {
       else if (lineColor) sliderBtn.style.background = lineColor;
 
       afterImgWrap.appendChild(afterImage);
-      sliderWrap.append(
-        beforeImage,
-        afterImgWrap,
-        sliderBtn
-      );
+      beforeImgWrap.appendChild(beforeImage);
+      sliderWrap.append(beforeImgWrap, afterImgWrap, sliderBtn);
       this.slider.appendChild(sliderWrap);
 
       Object.assign(cache, {

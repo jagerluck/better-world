@@ -1,2 +1,2 @@
 export * from './videoPlayer';
-export { PinSlider } from './PinSlider';
+export * from './PinSlider';
