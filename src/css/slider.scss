@@ -25,6 +25,10 @@ $mainColor: rgb(209, 209, 209);
       user-select: none;
     }
 
+    .before-img-wrap {
+      display: contents;
+    }
+
     .after-img-wrap {
       position: absolute;
       left: 150px;
