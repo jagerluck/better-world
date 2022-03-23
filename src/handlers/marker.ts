@@ -1,5 +1,4 @@
-import L from 'leaflet';
-import { Store } from '../store/store';
+import { PinSlider } from '../components';
 
 /* 
 steps when open Pin:
@@ -8,31 +7,33 @@ steps when open Pin:
   - open popup slider with scrollable video or photo
 */
 
-export const handleMarkerClick = (e: L.LeafletMouseEvent) => {
-  const id = 0; // TODO
-  const store = new Store();
-  const loadedPin = store.getById(id);
-  const slider = document.getElementById('slider');
-  console.log(slider);
-
-  const div = document.createElement('div');
-  Object.assign(div, {
-    className: 'popup',
-    height: 200,
-    width: 360,
-    style: `background: red; padding: 2rem;`,
-    innerHTML: 'some long text',
-    onclick: function () {
-      console.log('clicked', this);
-      // @ts-ignore
-      this.style.backgroundColor = this.style.backgroundColor === 'red' ? 'blue' : 'red';
-    },
+export const handleMarkerClick = (e: any) => {
+  const slider = new PinSlider({
+    width: '600',
+    height: '350',
+    beforeImg: 'https://i.stack.imgur.com/ipp4N.png',
+    afterImg:
+      'https://i.pinimg.com/originals/ea/69/dc/ea69dc6226e72a33f82d3add20b470df.jpg',
+    line: true,
+    lineColor: '#333',
   });
 
-  console.log(div.attributes, 'DIV');
+  // const div = document.createElement('div');
+  // Object.assign(div, {
+  //   className: 'popup',
+  //   height: 200,
+  //   width: 360,
+  //   style: `background: red; padding: 2rem;`,
+  //   innerHTML: 'some long text',
+  //   onclick: function () {
+  //     console.log('clicked', this);
+  //     // @ts-ignore
+  //     this.style.backgroundColor = this.style.backgroundColor === 'red' ? 'blue' : 'red';
+  //   },
+  // });
 
-  L.popup({ autoClose: true, autoPan: true })
-    .setLatLng(e.latlng)
-    .setContent(div)
-    .openOn(Store.map);
+  // L.popup({ autoClose: true, autoPan: true })
+  //   .setLatLng(e.latlng)
+  //   .setContent(slider)
+  //   .openOn(Store.map);
 };

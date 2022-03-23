@@ -52,7 +52,6 @@ export const initialize = () => {
 
   L.geoJSON(regions, {
     style: (feature) => {
-      console.log(feature);
       return {
         fillColor: getColor(),
         ...defaultFeatureStyle,

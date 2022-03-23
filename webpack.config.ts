@@ -15,7 +15,8 @@ const config: webpack.Configuration = {
     filename: 'app.js',
   },
   resolve: {
-    extensions: ['.ts', '.js', '.json', '.geojson'],
+    // ... for default extensions
+    extensions: ['.ts', '.js', '.json', '...'],
     fallback: {
       os: false,
       path: false,
@@ -30,7 +31,7 @@ const config: webpack.Configuration = {
         exclude: /node_modules/,
       },
       {
-        test: /\.scss$/,
+        test: /\.(css|scss)$/,
         use: [
           // fallback to style-loader in development
           // process.env.NODE_ENV !== 'production'
