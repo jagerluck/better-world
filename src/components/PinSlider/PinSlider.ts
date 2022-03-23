@@ -31,7 +31,6 @@ export class PinSlider<T> {
     this.moveHandler = this.moveHandler.bind(this);
 
     this.slider.style.display = 'flex';
-    this.options = { ...this.options, ...options };
 
     this.init();
   }
@@ -82,7 +81,6 @@ export class PinSlider<T> {
     const { baseImg, afterImg, line, lineColor, sliderWidth, sliderHeight } =
       this.options;
 
-    // messy to setup all slider related html here. runs once though
     if (!cache.cached) {
       const sliderWrap = document.createElement('div');
       const baseImgWrap = document.createElement('div');
@@ -93,59 +91,27 @@ export class PinSlider<T> {
       baseImgWrap.className = 'base-img-wrap';
       closeSliderBtn.className = 'close-slider-btn';
 
-      const afterImgWrap = document.createElement('div');
-      const sliderBtn = document.createElement('div');
-      const afterImage = document.createElement('img');
-      afterImage.className = 'after-img';
-      sliderBtn.className = 'slider-btn';
-      afterImgWrap.className = 'after-img-wrap';
-
       closeSliderBtn.addEventListener('click', () => {
         this.closeSlider();
       });
 
-      // this.setupComparisonViewer();
-
       baseImgWrap.appendChild(baseImage);
-      afterImgWrap.appendChild(afterImage);
-      sliderWrap.append(baseImgWrap, afterImgWrap, sliderBtn);
       this.slider.append(sliderWrap, closeSliderBtn); // TODO: closeButton
 
+      this.slider.style.marginTop = `-${sliderHeight / 2}px`; // center vertically
       Object.assign(cache, {
-        sliderWrap,
-        afterImgWrap,
-        sliderBtn,
-        baseImage,
-        afterImage,
         cached: true,
       });
     }
 
-    this.slider.style.marginTop = `-${sliderHeight / 2}px`; // center vertically
-    Object.assign(cache, {
-      sliderWidth,
-      sliderHeight,
-    });
-    cache.baseImage.src = baseImg;
-    cache.afterImage.src = afterImg;
-
-    await this.loadSliderImages([cache.baseImage, cache.afterImage]);
-
-    if (!line) cache.sliderBtn.style.background = 'none';
-    else if (lineColor) cache.sliderBtn.style.background = lineColor;
-
-    [cache.baseImage, cache.afterImage].forEach((img, i) =>
-      this.adjustImageSize(img)
-    );
-
-    cache.afterImgWrap.style.width = '50%';
-    cache.sliderBtn.style.left = '50%';
-
-    Object.assign(cache.sliderWrap.style, {
-      width: `${cache.sliderWidth + 10}px`, // + padding
-      height: `${cache.sliderHeight + 10}px`,
-    });
-
+    this.initMedia([
+      {
+        type: 'comparison',
+        baseImage: 'https://i.stack.imgur.com/ipp4N.png',
+        afterImage:
+          'https://i.pinimg.com/originals/ea/69/dc/ea69dc6226e72a33f82d3add20b470df.jpg',
+      },
+    ]);
     this.addListener();
   }
 
@@ -155,7 +121,7 @@ export class PinSlider<T> {
     this.options.map.dragging.enable();
   }
 
-  initMedia(data: any) {
+  initMedia(data: SliderMedia[]) {
     data.forEach((d: SliderMedia) => {
       switch (d.type) {
         case 'comparison':
@@ -163,8 +129,8 @@ export class PinSlider<T> {
           const afterImage = this.adjustImageSizeHTML(d.afterImage);
           this.slider.innerHTML += `
           <div class="slider-wrap" style="width: ${
-            cache.sliderWidth + 10
-          }px; height: ${cache.sliderHeight + 10}px;">
+            this.options.sliderWidth + 10
+          }px; height: ${this.options.sliderHeight + 10}px;">
             <div class="base-img-wrap">
             ${baseImage.outerHTML}
             </div>
@@ -177,16 +143,16 @@ export class PinSlider<T> {
         case 'video':
           this.slider.innerHTML += `
           <div class="slider-wrap" style="width: ${
-            cache.sliderWidth + 10
-          }px; height: ${cache.sliderHeight + 10}px;">
-          </div>`
+            this.options.sliderWidth + 10
+          }px; height: ${this.options.sliderHeight + 10}px;">
+          </div>`;
           break;
         case 'image':
           const image = this.adjustImageSizeHTML(d.baseImage);
           this.slider.innerHTML += `
           <div class="slider-wrap" style="width: ${
-            cache.sliderWidth + 10
-          }px; height: ${cache.sliderHeight + 10}px;">
+            this.options.sliderWidth + 10
+          }px; height: ${this.options.sliderHeight + 10}px;">
             <div class="base-img-wrap">
             ${image.outerHTML}
             </div>
@@ -200,66 +166,29 @@ export class PinSlider<T> {
 
   setupVideoPlayer() {}
 
-  adjustImageSize(image: HTMLImageElement) {
-    const [widthDiff, heightDiff] = [
-      image.width - cache.sliderWidth,
-      image.height - cache.sliderHeight,
-    ];
-    const [width, height] =
-      widthDiff > heightDiff
-        ? [
-            widthDiff > 0 ? cache.sliderWidth : image.width,
-            image.height / (image.width / cache.sliderWidth),
-          ]
-        : [
-            image.width / (image.height / cache.sliderHeight),
-            heightDiff > 0 ? cache.sliderHeight : image.height,
-          ];
-    // place image at the center of the parent container
-    image.style.marginLeft = `${(cache.sliderWidth - width) / 2}px`;
-    image.style.marginTop = `${(cache.sliderHeight - height) / 2}px`;
-
-    /** Examples for 2 images💁:
-     * 70x40 & 50x50
-     * 70-50(width - maxWidth) > 40-50(height - maxHeight)
-     * so 50 is needed width and height is:
-     * 40(img height) / (70/50)(needed propotion)
-     *
-     * 70x40 & 150x30
-     * 70-150(width - maxWidth) > 40-30(height - maxHeight)
-     * so 30 is needed height and width is:
-     * 70(img width) / (40/30)(needed propotion)
-     */
-
-    Object.assign(image, {
-      width,
-      height,
-    });
-  }
-
   adjustImageSizeHTML(src: string) {
     const image = document.createElement('img');
     image.className = 'base-img';
     image.src = src;
 
     const [widthDiff, heightDiff] = [
-      image.width - cache.sliderWidth,
-      image.height - cache.sliderHeight,
+      image.width - this.options.sliderWidth,
+      image.height - this.options.sliderHeight,
     ];
     const [width, height] =
       widthDiff > heightDiff
         ? [
-            widthDiff > 0 ? cache.sliderWidth : image.width,
-            image.height / (image.width / cache.sliderWidth),
+            widthDiff > 0 ? this.options.sliderWidth : image.width,
+            image.height / (image.width / this.options.sliderWidth),
           ]
         : [
-            image.width / (image.height / cache.sliderHeight),
-            heightDiff > 0 ? cache.sliderHeight : image.height,
+            image.width / (image.height / this.options.sliderHeight),
+            heightDiff > 0 ? this.options.sliderHeight : image.height,
           ];
     // place image at the center of the parent container
-    image.style.marginLeft = `${(cache.sliderWidth - width) / 2}px`;
-    image.style.marginTop = `${(cache.sliderHeight - height) / 2}px`;
-
+    image.style.marginLeft = `${(this.options.sliderWidth - width) / 2}px`;
+    image.style.marginTop = `${(this.options.sliderHeight - height) / 2}px`;
+    
     /** Examples for 2 images💁:
      * 70x40 & 50x50
      * 70-50(width - maxWidth) > 40-50(height - maxHeight)
