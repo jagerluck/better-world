@@ -1,4 +1,4 @@
-import { PinSlider } from '../components';
+import { Store } from '../store/store';
 
 /* 
 steps when open Pin:
@@ -8,15 +8,7 @@ steps when open Pin:
 */
 
 export const handleMarkerClick = (e: any) => {
-  const slider = new PinSlider({
-    width: '600',
-    height: '350',
-    beforeImg: 'https://i.stack.imgur.com/ipp4N.png',
-    afterImg:
-      'https://i.pinimg.com/originals/ea/69/dc/ea69dc6226e72a33f82d3add20b470df.jpg',
-    line: true,
-    lineColor: '#333',
-  });
+  new Store().getById(100);
 
   // const div = document.createElement('div');
   // Object.assign(div, {

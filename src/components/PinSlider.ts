@@ -1,4 +1,4 @@
-import L, { DomEvent } from "leaflet";
+import L, { DomEvent } from 'leaflet';
 
 const cache: Record<string, any> = {};
 
@@ -12,7 +12,7 @@ export class PinSlider<T> {
     lineColor: '',
     nameId: 'slider',
     stopPropagation: (e: any) => DomEvent.stopPropagation(e),
-    preventDefault: (e: any) => DomEvent.preventDefault(e)
+    preventDefault: (e: any) => DomEvent.preventDefault(e),
   };
   isPhone = false;
   // there is only one modify-only slider
@@ -75,8 +75,8 @@ export class PinSlider<T> {
   moveHandler(e: any) {
     let marginX = cache.marginX;
     cache.sliderBtn.style.left = e.screenX + 'px';
-    console.log(e, marginX);
-    cache.beforeImgWrap.style.width = e.pageX - marginX + 'px';
+    // change position of an image
+    // cache.beforeImgWrap.style.width = e.pageX - marginX + 'px';
   }
 
   init() {
@@ -86,33 +86,34 @@ export class PinSlider<T> {
 
     if (!cache.cached) {
       const sliderWrap = document.createElement('div');
-      const beforeImgWrap = document.createElement('div');
+      const afterImgWrap = document.createElement('div');
       const sliderBtn = document.createElement('div');
       const beforeImage = document.createElement('img');
       const afterImage = document.createElement('img');
 
       sliderWrap.className = 'slider-wrap';
       beforeImage.className = 'before-img';
+      afterImage.className = 'after-img';
       sliderBtn.className = 'slider-btn';
+      afterImgWrap.className = 'after-img-wrap';
 
       beforeImage.src = beforeImg;
       afterImage.src = afterImg;
 
-      console.group(beforeImage);
-
       if (!line) sliderBtn.style.background = 'none';
       else if (lineColor) sliderBtn.style.background = lineColor;
 
+      afterImgWrap.appendChild(afterImage);
       sliderWrap.append(
-        beforeImgWrap.appendChild(beforeImage),
-        afterImage,
+        beforeImage,
+        afterImgWrap,
         sliderBtn
       );
       this.slider.appendChild(sliderWrap);
 
       Object.assign(cache, {
         sliderWrap,
-        beforeImgWrap,
+        afterImgWrap,
         sliderBtn,
         beforeImage,
         afterImage,
@@ -124,6 +125,8 @@ export class PinSlider<T> {
     Object.assign(this.slider.style, {
       width: `${width}px`,
       height: `${height}px`,
+      // width: `fit-content`,
+      // height: `fit-content`,
     });
 
     this.addListener();
@@ -134,6 +137,15 @@ export class PinSlider<T> {
   return {
     getCache() {
       return cache;
-    }
-  }
+    },
+  };
 })();
+
+
+/*
+
+TODO: 
+  get initial max width and height:
+  
+
+*/

@@ -1,4 +1,5 @@
 import L from 'leaflet';
+import { PinSlider } from '../components';
 import { mapId } from '../consts';
 // import rawRegions from '../ukraine_geojson';
 
@@ -24,6 +25,18 @@ export class Store {
     if (this.state.pins[id]) {
       return this.state.pins[id]; 
     }
+
+    // TODO: substitute mock
+    new PinSlider({
+      width: '600',
+      height: '350',
+      beforeImg: 'https://i.stack.imgur.com/ipp4N.png',
+      afterImg:
+        'https://i.pinimg.com/originals/ea/69/dc/ea69dc6226e72a33f82d3add20b470df.jpg',
+      line: true,
+      lineColor: '#333',
+    });
+
     return;
     // try {
     //   const pin = await fetch(`${process.env.API}/${id}`);
