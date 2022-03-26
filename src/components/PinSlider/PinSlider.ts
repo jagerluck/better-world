@@ -1,6 +1,48 @@
 import L, { DomEvent } from 'leaflet';
 
 const cache: Record<string, any> = {};
+const sliderDefaults = {
+  maxWidth: 850,
+  maxHeight: 500,
+};
+
+const adjustImageSize = (
+  image: HTMLImageElement,
+  maxWidth: number,
+  maxHeight: number
+) => {
+  const [widthDiff, heightDiff] = [
+    image.width - maxWidth,
+    image.height - maxHeight,
+  ];
+  const [width, height] =
+    widthDiff > heightDiff
+      ? [
+          widthDiff > 0 ? maxWidth : image.width,
+          image.height / (image.width / maxWidth),
+        ]
+      : [
+          image.width / (image.height / maxHeight),
+          heightDiff > 0 ? maxHeight : image.height,
+        ];
+
+  /** Examples:
+   * 70x40 vs 50x50
+   * 70-50(width - maxWidth) > 40-50(height - maxHeight)
+   * so 50 is needed width and height is:
+   * 40(img height) / (70/50)(needed propotion)
+   *
+   * 70x40 vs 150x30
+   * 70-150(width - maxWidth) > 40-30(height - maxHeight)
+   * so 30 is needed height and width is:
+   * 70(img width) / (40/30)(needed propotion)
+   */
+
+  Object.assign(image, {
+    width,
+    height,
+  })
+};
 
 export class PinSlider<T> {
   options = {
@@ -105,10 +147,32 @@ export class PinSlider<T> {
       if (!line) sliderBtn.style.background = 'none';
       else if (lineColor) sliderBtn.style.background = lineColor;
 
+      const [maxWidth, maxHeight] = [
+        Math.min(
+          afterImage.naturalWidth,
+          beforeImage.naturalWidth,
+          sliderDefaults.maxWidth
+        ),
+        Math.min(
+          afterImage.naturalHeight,
+          beforeImage.naturalHeight,
+          sliderDefaults.maxHeight
+        ),
+      ];
+
+      [beforeImage, afterImage].forEach((img) => adjustImageSize(img, maxWidth, maxHeight));
+
       afterImgWrap.appendChild(afterImage);
       beforeImgWrap.appendChild(beforeImage);
       sliderWrap.append(beforeImgWrap, afterImgWrap, sliderBtn);
       this.slider.appendChild(sliderWrap);
+
+      Object.assign(sliderWrap.style, {
+        width: `${maxWidth}px`,
+        height: `${maxHeight}px`,
+        // width: `fit-content`,
+        // height: `fit-content`,
+      });
 
       Object.assign(cache, {
         sliderWrap,
@@ -121,12 +185,12 @@ export class PinSlider<T> {
       });
     }
 
-    Object.assign(this.slider.style, {
-      width: `${width}px`,
-      height: `${height}px`,
-      // width: `fit-content`,
-      // height: `fit-content`,
-    });
+    // Object.assign(this.slider.style, {
+    //   width: `${width}px`,
+    //   height: `${height}px`,
+    //   // width: `fit-content`,
+    //   // height: `fit-content`,
+    // });
 
     this.addListener();
   }
@@ -139,12 +203,3 @@ export class PinSlider<T> {
     },
   };
 })();
-
-
-/*
-
-TODO: 
-  get initial max width and height:
-  
-
-*/
