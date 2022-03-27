@@ -9,7 +9,7 @@ export interface IPinSlider {
 }
 
 export interface SliderCache extends Partial<IPinSlider> {
-  
+  [k: number]: any; // pins with cached media
   cached: boolean;
 }
 
