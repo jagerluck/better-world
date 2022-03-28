@@ -9,7 +9,8 @@ const sliderDefaults = {
 const adjustImageSize = (
   image: HTMLImageElement,
   maxWidth: number,
-  maxHeight: number
+  maxHeight: number,
+  isSecondImage: boolean
 ) => {
   const [widthDiff, heightDiff] = [
     image.width - maxWidth,
@@ -26,6 +27,11 @@ const adjustImageSize = (
           heightDiff > 0 ? maxHeight : image.height,
         ];
 
+  if (isSecondImage) {
+    // init image at the center & avoid repositioning when container width changes (for moving slider button)
+    image.style.marginLeft = `${(maxWidth - width) / 2}px`;
+  }
+
   /** Examples:
    * 70x40 vs 50x50
    * 70-50(width - maxWidth) > 40-50(height - maxHeight)
@@ -41,7 +47,7 @@ const adjustImageSize = (
   Object.assign(image, {
     width,
     height,
-  })
+  });
 };
 
 export class PinSlider<T> {
@@ -117,8 +123,8 @@ export class PinSlider<T> {
   moveHandler(e: any) {
     let marginX = cache.marginX;
     cache.sliderBtn.style.left = e.screenX + 'px';
-    // change position of an image
-    // cache.beforeImgWrap.style.width = e.pageX - marginX + 'px';
+    // hide/unhide 2nd image
+    cache.afterImgWrap.style.width = e.pageX - marginX + 'px';
   }
 
   init() {
@@ -160,7 +166,10 @@ export class PinSlider<T> {
         ),
       ];
 
-      [beforeImage, afterImage].forEach((img) => adjustImageSize(img, maxWidth, maxHeight));
+      [beforeImage, afterImage].forEach((img, i) =>
+        adjustImageSize(img, maxWidth, maxHeight, i === 1 ? true : false)
+      );
+      afterImgWrap.style.width = '50%';
 
       afterImgWrap.appendChild(afterImage);
       beforeImgWrap.appendChild(beforeImage);
@@ -170,8 +179,6 @@ export class PinSlider<T> {
       Object.assign(sliderWrap.style, {
         width: `${maxWidth}px`,
         height: `${maxHeight}px`,
-        // width: `fit-content`,
-        // height: `fit-content`,
       });
 
       Object.assign(cache, {
@@ -184,13 +191,6 @@ export class PinSlider<T> {
         cached: true,
       });
     }
-
-    // Object.assign(this.slider.style, {
-    //   width: `${width}px`,
-    //   height: `${height}px`,
-    //   // width: `fit-content`,
-    //   // height: `fit-content`,
-    // });
 
     this.addListener();
   }
