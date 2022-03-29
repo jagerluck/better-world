@@ -13,6 +13,14 @@ export const initialize = () => {
   const map = Store.map;
 
   // map settings
+  // Satelite Layer
+  const googleSatellite = L.tileLayer(
+    'http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
+    {
+      maxZoom: 19,
+      subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+    }
+  );
   // Open Street
   const osm = L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -20,14 +28,6 @@ export const initialize = () => {
       maxZoom: 19,
       attribution:
         '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>',
-    }
-  );
-  // Satelite Layer
-  const googleSatellite = L.tileLayer(
-    'http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
-    {
-      maxZoom: 19,
-      subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
     }
   );
   // Google Streets
@@ -39,20 +39,19 @@ export const initialize = () => {
     }
   );
   const baseLayers = {
-    Satellite: googleSatellite,
     GoogleMap: googleStreets,
     OpenStreetMap: osm,
+    Satellite: googleSatellite,
   };
   googleStreets.addTo(map);
-  googleSatellite.addTo(map);
   osm.addTo(map);
+  googleSatellite.addTo(map);
   L.control.layers(baseLayers).addTo(map);
 
   setupMapLegend();
 
   L.geoJSON(regions, {
     style: (feature) => {
-      console.log(feature);
       return {
         fillColor: getColor(),
         ...defaultFeatureStyle,
@@ -63,7 +62,7 @@ export const initialize = () => {
 
   L.marker([49, 33]).addTo(map).addEventListener('click', handleMarkerClick);
 
-  map.on('click', (e: any) => {
-    console.log(e);
-  });
+  // map.on('click', (e: any) => {
+  //   console.log(e);
+  // });
 };

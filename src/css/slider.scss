@@ -1,25 +1,95 @@
-@import './mixins.scss';
+$mainColor: rgb(209, 209, 209);
 
 #slider {
-    position: absolute;
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
+  position: absolute;
+  z-index: 402;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
+  .slider-wrap {
+    position: relative;
     height: 100%;
-    background: rgba(#f2f2f2, .3);
-    outline: none;
-    margin: 0;
-    transition: all .2s;
-    @include center;
-    &:hover {
-      background: rgba(#f2f2f2, .1);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+
+    .before-img {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      object-fit: contain;
+      user-select: none;
     }
-    &::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 6px;
-      height: 600px;
-      background: white;
-      cursor: pointer;
+
+    .before-img-wrap {
+      display: contents;
+    }
+
+    .after-img-wrap {
+      position: absolute;
+      left: 150px;
+      /*
+      TODO: play with values to set left property. 
+
+      left: fullSliderWidth/2 - afterImageFullWidth
+
+      */
+      // width: auto;
+      // height: auto;
+      // width: 100%;
+
+      width: 300px;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .after-img {
+      position: absolute;
+      height: 100%;
+      width: 300px; // 50%
+      object-fit: none;
+      user-select: none;
+    }
+
+    .slider-btn {
+      display: block;
+      width: 0.5px;
+      box-shadow: 1px 0 3px rgba(33, 33, 33, 0.5);
+      height: 100%;
+      background: $mainColor;
+      position: absolute;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+      cursor: ew-resize;
+
+      &::after {
+        width: 8px;
+        height: 65px;
+        background-color: $mainColor;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        content: '';
+        color: white;
+        font-size: 25px;
+        font-weight: 900;
+        text-align: center;
+        line-height: 50px;
+        border-radius: 5%;
+        transition: all 0.3s ease;
+      }
+      &:hover::after {
+        width: 9px;
+        height: 72px;
+        font-size: 20px;
+        line-height: 40px;
+      }
+    }
   }
 }
