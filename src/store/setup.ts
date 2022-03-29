@@ -60,7 +60,10 @@ export const initialize = () => {
     onEachFeature,
   }).addTo(map);
 
-  L.marker([49, 33]).addTo(map).addEventListener('click', handleMarkerClick);
+  L.marker([49, 33]).addTo(map).addEventListener('click', (e) => {
+    map.dragging.disable();
+    handleMarkerClick(e);
+  });
 
   // map.on('click', (e: any) => {
   //   console.log(e);
