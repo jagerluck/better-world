@@ -17,6 +17,7 @@
     "sourceMap": true,
     "experimentalDecorators": true,
     "isolatedModules": true,
+    "strictNullChecks": false, // TODO: revisit. need to omit these checks in only some files not everywhere
     "noEmitHelpers": true,
     "resolveJsonModule": true,
     "types": [
@@ -31,10 +32,4 @@
       "module": "CommonJS"
     }
   },
-  // "include": [
-  //   "src/**/*.ts"
-  // ],
-  // "exclude": [
-  //   "node_modules"
-  // ],
 }

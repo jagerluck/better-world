@@ -28,10 +28,9 @@ export class Store {
 
     // TODO: substitute mock
     new PinSlider({
-      width: '600',
-      height: '350',
-      beforeImg: 'https://i.stack.imgur.com/ipp4N.png',
-      afterImg:
+      map: Store.map,
+      afterImg: 'https://i.stack.imgur.com/ipp4N.png',
+      beforeImg:
         'https://i.pinimg.com/originals/ea/69/dc/ea69dc6226e72a33f82d3add20b470df.jpg',
       line: true,
       lineColor: '#333',

@@ -11,8 +11,8 @@ const config: webpack.Configuration = {
   context: __dirname,
   entry: './src/app.ts',
   output: {
-    path: path.resolve(__dirname, 'dist'),
     filename: 'app.js',
+    path: path.resolve(__dirname, 'dist'),
   },
   resolve: {
     // ... for default extensions
@@ -43,8 +43,11 @@ const config: webpack.Configuration = {
         ],
       },
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
-        type: 'asset/resource',
+        test: /\.(png|jpe?g|svg)$/,
+        loader: 'file-loader',
+        options: {
+          name: 'assets/[name].[ext]',
+        },
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,

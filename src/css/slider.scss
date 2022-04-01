@@ -1,76 +1,66 @@
-$mainColor: rgb(209, 209, 209);
+$mainColor: rgb(184, 184, 184);
 
 #slider {
-  position: absolute;
+  position: relative;
   z-index: 402;
+  top: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
-
+  
   .slider-wrap {
     position: relative;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
+    display: block;
+    background-color: #000;
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 1px 10px 10px #333;
 
     .before-img {
-      width: 100%;
-      height: 100%;
+      display: flex;
       overflow: hidden;
-      object-fit: contain;
       user-select: none;
     }
 
     .before-img-wrap {
-      display: contents;
+      display: block;
+      background-color: black;
+      border-radius: inherit;
+      overflow: hidden;
     }
 
     .after-img-wrap {
       position: absolute;
-      left: 150px;
-      /*
-      TODO: play with values to set left property. 
-
-      left: fullSliderWidth/2 - afterImageFullWidth
-
-      */
-      // width: auto;
-      // height: auto;
-      // width: 100%;
-
-      width: 300px;
-      height: 100%;
+      left: 0;
+      top: 0;
+      background-color: black;
       overflow: hidden;
+      border-radius: inherit;
     }
 
     .after-img {
-      position: absolute;
-      height: 100%;
-      width: 300px; // 50%
-      object-fit: none;
+      display: flex;
       user-select: none;
     }
 
     .slider-btn {
       display: block;
       width: 0.5px;
-      box-shadow: 1px 0 3px rgba(33, 33, 33, 0.5);
       height: 100%;
       background: $mainColor;
       position: absolute;
       left: 50%;
       top: 0;
       transform: translateX(-50%);
+      box-shadow: 1px 0 3px #222;
       cursor: ew-resize;
 
       &::after {
         width: 8px;
         height: 65px;
         background-color: $mainColor;
+        box-shadow: 1px 0 5px #000;
         position: absolute;
         top: 50%;
         left: 50%;
@@ -92,4 +82,37 @@ $mainColor: rgb(209, 209, 209);
       }
     }
   }
+
+  &:hover {
+    cursor: default;
+  }
+}
+
+.close-slider-btn {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  width: 24px;
+  height: 24px;
+  opacity: 0.3;
+}
+.close-slider-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+  cursor: pointer;
+  transition: transform linear .1s;
+}
+.close-slider-btn:before, .close-slider-btn:after {
+  position: absolute;
+  left: 12px;
+  content: ' ';
+  height: 24px;
+  width: 2px;
+  background-color: rgb(214, 214, 214);
+}
+.close-slider-btn:before {
+  transform: rotate(45deg);
+}
+.close-slider-btn:after {
+  transform: rotate(-45deg);
 }

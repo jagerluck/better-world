@@ -5,9 +5,10 @@ import regions from '../ukraine_geojson';
 import { handleMarkerClick, onEachFeature } from '../handlers';
 import { getColor } from '../helpers';
 import { defaultFeatureStyle } from '../consts';
+import { RedPin } from '../assets';
 
 // initialize map
-new Store();
+const store = new Store();
 
 export const initialize = () => {
   const map = Store.map;
@@ -60,9 +61,15 @@ export const initialize = () => {
     onEachFeature,
   }).addTo(map);
 
-  L.marker([49, 33]).addTo(map).addEventListener('click', handleMarkerClick);
+  const rIcon = L.icon({
+    iconUrl: RedPin,
+    iconSize: [16, 16], // should vary
+    // TODO: more mods
+  });
 
-  // map.on('click', (e: any) => {
-  //   console.log(e);
-  // });
+  L.marker([49, 33], { icon: rIcon })
+    .addTo(map)
+    .addEventListener('click', (e) => {
+      store.getById(100); // TODO: API
+    });
 };
