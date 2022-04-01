@@ -3,9 +3,11 @@ We must know, that psychology is extremely complex subject and has to be properl
 
 Current backlog:
 
-  - popup photo/video layout;
+  - structure for video - common - comparison slider
 
-  - custom icons;
+  - icons, size;
+
+  - form bigger icons for places 
 
   - lazy loading of all positions and markers (just positions and ids);
 
