@@ -4,10 +4,23 @@ export interface IPinSlider {
   sliderWrap: HTMLDivElement;
   afterImgWrap: HTMLDivElement;
   sliderBtn: HTMLElement;
-  beforeImage: HTMLImageElement;
+  baseImage: HTMLImageElement;
   afterImage: HTMLImageElement;
 }
 
 export interface SliderCache extends Partial<IPinSlider> {
   cached: boolean;
+}
+
+
+export type MediaType = 'image' | 'comparison' | 'video'; 
+export type SliderMedia = {
+  type: MediaType;
+  video?: any;
+  baseImage?: string;
+  afterImage?: string;
+}
+
+export type SliderData = {
+
 }

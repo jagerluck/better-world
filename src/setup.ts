@@ -1,11 +1,11 @@
 import L from 'leaflet';
-import { setupMapLegend } from '../controllers';
-import { Store } from './store';
-import regions from '../ukraine_geojson';
-import { handleMarkerClick, onEachFeature } from '../handlers';
-import { getColor } from '../helpers';
-import { defaultFeatureStyle } from '../consts';
-import { RedPin } from '../assets';
+import { setupMapLegend } from './controllers';
+import { Store } from './store/store';
+import regions from './ukraine_geojson';
+import { onEachFeature } from './handlers';
+import { getColor } from './helpers';
+import { defaultFeatureStyle } from './consts';
+import { RedPin } from './assets';
 
 // initialize map
 const store = new Store();
@@ -70,6 +70,6 @@ export const initialize = () => {
   L.marker([49, 33], { icon: rIcon })
     .addTo(map)
     .addEventListener('click', (e) => {
-      store.getById(100); // TODO: API
+      store.displayPinData(100); // TODO: API
     });
 };
