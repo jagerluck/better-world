@@ -4,6 +4,7 @@ export interface IPinSlider {
   sliderWrap: HTMLDivElement;
   afterImgWrap: HTMLDivElement;
   sliderBtn: HTMLElement;
+  closeSliderBtn: HTMLElement;
   baseImage: HTMLImageElement;
   afterImage: HTMLImageElement;
 }
