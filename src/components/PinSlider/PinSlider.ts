@@ -7,19 +7,18 @@ const cache: SliderCache = {
   cached: false,
 };
 
-export class PinSlider<T> {
+export class PinSlider<T extends { data: SliderMedia[] }> {
   options = {
     id: 0,
     sliderWidth: 800,
     sliderHeight: 600,
-    data: [{}],
-    video: '',
+    data: {} as SliderMedia[],
     line: true,
     lineColor: '',
     map: {} as L.Map,
   };
   currentIndex = 0;
-  currentMedia = {};
+  maxIndex = 0;
   isPhone = false;
   // one modify-only slider
   slider = document.getElementById('slider')!;
@@ -67,7 +66,8 @@ export class PinSlider<T> {
 
     cache.sliderBtn.style.left = cursorOffset;
     // hide/reveal 2nd image
-    cache[this.options.id][this.currentIndex].afterImgWrap.style.width = cursorOffset;
+    cache[this.options.id][this.currentIndex].afterImgWrap.style.width =
+      cursorOffset;
   }
 
   async init() {
@@ -75,6 +75,10 @@ export class PinSlider<T> {
       const sliderWrap = document.createElement('div');
       const closeSliderBtn = document.createElement('span');
       const sliderBtn = document.createElement('div');
+      const prevSlideBtn = document.createElement('span');
+      const nextSlideBtn = document.createElement('span');
+      prevSlideBtn.className = 'prev-slide-btn';
+      nextSlideBtn.className = 'next-slide-btn';
       sliderWrap.className = 'slider-wrap';
       closeSliderBtn.className = 'close-slider-btn';
       sliderBtn.className = 'slider-btn';
@@ -87,44 +91,41 @@ export class PinSlider<T> {
       closeSliderBtn.addEventListener('click', () => {
         this.closeSlider();
       });
+      prevSlideBtn.addEventListener('click', () => {
+        this.prevSlide();
+      });
+      nextSlideBtn.addEventListener('click', () => {
+        this.nextSlide();
+      });
 
-      this.slider.append(sliderWrap);
-
+      this.slider.appendChild(sliderWrap);
       // center
       this.slider.style.marginTop = `-${this.options.sliderHeight / 2}px`;
       Object.assign(cache, {
         sliderWrap,
         closeSliderBtn,
         sliderBtn,
+        prevSlideBtn,
+        nextSlideBtn,
         cached: true,
       });
     }
 
-    // TODO: this.initMedia(pinData.data)
-    this.initMedia([
-      {
-        type: 'comparison',
-        baseImage: 'https://i.stack.imgur.com/ipp4N.png',
-        afterImage:
-          'https://i.pinimg.com/originals/ea/69/dc/ea69dc6226e72a33f82d3add20b470df.jpg',
-      },
-      {
-        type: 'image',
-        baseImage:
-          'https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&w=1000&q=80',
-      },
-    ]);
+    this.initMedia(this.options.data);
     this.addListener();
   }
 
   closeSlider() {
     cache.sliderWrap.innerHTML === '';
+    cache.sliderBtn.style.left = '50%';
     this.slider.style.display = 'none';
     this.options.map.dragging.enable();
   }
 
   initMedia(data: SliderMedia[]) {
     cache[this.options.id] = {};
+    this.maxIndex = Object.keys(cache[this.options.id]).length;
+
     data.forEach((d: SliderMedia, i) => {
       switch (d.type) {
         case 'image':
@@ -133,7 +134,10 @@ export class PinSlider<T> {
           const baseImgWrap = document.createElement('div');
           baseImgWrap.className = 'before-img-wrap';
           baseImgWrap.appendChild(baseImage);
-          cache[this.options.id][i] = { baseImgWrap };
+          cache[this.options.id][i] = {
+            type: d.type,
+            baseImgWrap,
+          };
 
           if ('comparison' === d.type) {
             const [afterImage] = this.adjustImageSizesHTML(d.afterImage);
@@ -146,7 +150,7 @@ export class PinSlider<T> {
           }
           break;
         case 'video':
-          this.slider.innerHTML = `${d.video}`; // TODO
+          this.slider.innerHTML = `${'d.video'}`; // TODO
           break;
         default:
           break;
@@ -154,18 +158,43 @@ export class PinSlider<T> {
     });
 
     // initial setup ------------------
-    this.viewSlider();
+    this.viewSlide();
   }
 
-  viewSlider() {
-    // separate this logic into method to activate navigation
-    debugger;
-    cache.sliderWrap.append(
-      cache[this.options.id][this.currentIndex].baseImgWrap,
-      cache[this.options.id][this.currentIndex].afterImgWrap,
-      cache.sliderBtn,
-      cache.closeSliderBtn
-    );
+  nextSlide() {
+    const nextIndex = this.currentIndex + 1;
+    this.currentIndex = nextIndex > this.maxIndex ? 0 : nextIndex;
+    this.viewSlide();
+  }
+  prevSlide() {
+    const prevIndex = this.currentIndex - 1;
+    this.currentIndex = prevIndex < 0 ? this.maxIndex : prevIndex;
+    this.viewSlide();
+  }
+
+  viewSlide() {
+    cache.sliderWrap.innerHTML = '';
+    switch (cache[this.options.id][this.currentIndex].type) {
+      case 'image':
+        cache.sliderWrap.append(
+          cache[this.options.id][this.currentIndex].baseImgWrap,
+          cache.prevSlideBtn,
+          cache.nextSlideBtn,
+          cache.closeSliderBtn
+        );
+        break;
+      case 'comparison':
+        cache.sliderWrap.append(
+          cache[this.options.id][this.currentIndex].baseImgWrap,
+          cache[this.options.id][this.currentIndex].afterImgWrap,
+          cache.sliderBtn,
+          cache.prevSlideBtn,
+          cache.nextSlideBtn,
+          cache.closeSliderBtn
+        );
+        break;
+      case 'video':
+    }
   }
 
   setupVideoPlayer() {}
@@ -219,6 +248,7 @@ export class PinSlider<T> {
   }
 }
 
+// keep cache in memory
 (() => {
   return {
     getCache() {

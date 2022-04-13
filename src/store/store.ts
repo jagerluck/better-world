@@ -28,11 +28,20 @@ export class Store {
 
     // TODO: substitute mock
     new PinSlider({
-      data: [{  }],
+      data: [
+        {
+          type: 'comparison',
+          baseImage: 'https://i.stack.imgur.com/ipp4N.png',
+          afterImage:
+            'https://i.pinimg.com/originals/ea/69/dc/ea69dc6226e72a33f82d3add20b470df.jpg',
+        },
+        {
+          type: 'image',
+          baseImage:
+            'https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&w=1000&q=80',
+        },
+      ],
       map: Store.map,
-      afterImg: 'https://i.stack.imgur.com/ipp4N.png',
-      baseImg:
-        'https://i.pinimg.com/originals/ea/69/dc/ea69dc6226e72a33f82d3add20b470df.jpg',
       line: true,
       lineColor: '#333',
     });

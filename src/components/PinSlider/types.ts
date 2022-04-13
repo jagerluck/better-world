@@ -7,6 +7,8 @@ export interface IPinSlider {
   closeSliderBtn: HTMLElement;
   baseImage: HTMLImageElement;
   afterImage: HTMLImageElement;
+  prevSlideBtn: HTMLImageElement;
+  nextSlideBtn: HTMLImageElement;
 }
 
 export interface SliderCache extends Partial<IPinSlider> {
