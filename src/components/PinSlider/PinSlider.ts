@@ -1,13 +1,5 @@
 import L from 'leaflet';
 import { SliderCache, SliderMedia } from './types';
-
-/**
- * new pinslider({
- *  data,
- *  adds,
- * })
- */
-
 /**
  * Cached slider properties for ext functions
  */
@@ -126,7 +118,6 @@ export class PinSlider<T> {
   }
 
   initMedia(data: SliderMedia[]) {
-    // initial slider and logic to change when clicking an image
     data.forEach((d: SliderMedia) => {
       switch (d.type) {
         case 'comparison':
@@ -150,15 +141,6 @@ export class PinSlider<T> {
               afterImgWrap,
             };
           }
-
-          // initial setup
-          cache.sliderWrap.innerHTML === '' &&
-            cache.sliderWrap.append(
-              cache[this.currentIndex].baseImgWrap,
-              cache[this.currentIndex].afterImgWrap,
-              cache.sliderBtn,
-              cache.closeSliderBtn
-            );
           break;
         case 'video':
           this.slider.innerHTML = `${d.video}`;
@@ -170,11 +152,27 @@ export class PinSlider<T> {
           baseImgWrap.appendChild(baseImage);
           cache.sliderWrap.append(cache[this.currentIndex].baseImgWrap);
           break;
+        default:
+          break;
       }
     });
-  }
 
-  setupComparisonViewer() {}
+    // initial setup ------------------
+    cache.sliderWrap.innerHTML === '';
+    this.viewSlider();
+
+  }
+  
+  
+  viewSlider() {
+    // separate this logic into method to activate navigation
+    cache.sliderWrap.append(
+      cache[this.currentIndex].baseImgWrap,
+      cache[this.currentIndex].afterImgWrap,
+      cache.sliderBtn,
+      cache.closeSliderBtn
+    );
+  }
 
   setupVideoPlayer() {}
 
