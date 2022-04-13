@@ -1,5 +1,5 @@
 import L from 'leaflet';
-import { MediaType, SliderCache, SliderMedia } from './types';
+import { SliderCache, SliderMedia } from './types';
 /**
  * Cached slider properties for ext functions
  */
@@ -9,6 +9,7 @@ const cache: SliderCache = {
 
 export class PinSlider<T> {
   options = {
+    id: 0,
     sliderWidth: 800,
     sliderHeight: 600,
     data: [{}],
@@ -66,7 +67,7 @@ export class PinSlider<T> {
 
     cache.sliderBtn.style.left = cursorOffset;
     // hide/reveal 2nd image
-    cache[this.currentIndex].afterImgWrap.style.width = cursorOffset;
+    cache[this.options.id][this.currentIndex].afterImgWrap.style.width = cursorOffset;
   }
 
   async init() {
@@ -87,7 +88,7 @@ export class PinSlider<T> {
         this.closeSlider();
       });
 
-      this.slider.append(sliderWrap); // TODO: closeButton, sliderButton
+      this.slider.append(sliderWrap);
 
       // center
       this.slider.style.marginTop = `-${this.options.sliderHeight / 2}px`;
@@ -99,7 +100,7 @@ export class PinSlider<T> {
       });
     }
 
-    // TODO: change mock
+    // TODO: this.initMedia(pinData.data)
     this.initMedia([
       {
         type: 'comparison',
@@ -107,50 +108,45 @@ export class PinSlider<T> {
         afterImage:
           'https://i.pinimg.com/originals/ea/69/dc/ea69dc6226e72a33f82d3add20b470df.jpg',
       },
+      {
+        type: 'image',
+        baseImage:
+          'https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&w=1000&q=80',
+      },
     ]);
     this.addListener();
   }
 
   closeSlider() {
-    // this.slider.innerHTML = '';
+    cache.sliderWrap.innerHTML === '';
     this.slider.style.display = 'none';
     this.options.map.dragging.enable();
   }
 
   initMedia(data: SliderMedia[]) {
-    data.forEach((d: SliderMedia) => {
+    cache[this.options.id] = {};
+    data.forEach((d: SliderMedia, i) => {
       switch (d.type) {
-        case 'comparison':
-          if (!cache[this.currentIndex]) {
-            const [baseImage, afterImage] = this.adjustImageSizesHTML(
-              d.baseImage,
-              d.afterImage
-            );
-            const [baseImgWrap, afterImgWrap] = [
-              document.createElement('div'),
-              document.createElement('div'),
-            ];
-            [baseImgWrap.className, afterImgWrap.className] = [
-              'before-img-wrap',
-              'after-img-wrap',
-            ];
-            baseImgWrap.appendChild(baseImage);
-            afterImgWrap.appendChild(afterImage);
-            cache[this.currentIndex] = {
-              baseImgWrap,
-              afterImgWrap,
-            };
-          }
-          break;
-        case 'video':
-          this.slider.innerHTML = `${d.video}`;
-          break;
         case 'image':
+        case 'comparison':
           const [baseImage] = this.adjustImageSizesHTML(d.baseImage);
           const baseImgWrap = document.createElement('div');
           baseImgWrap.className = 'before-img-wrap';
           baseImgWrap.appendChild(baseImage);
-          cache.sliderWrap.append(cache[this.currentIndex].baseImgWrap);
+          cache[this.options.id][i] = { baseImgWrap };
+
+          if ('comparison' === d.type) {
+            const [afterImage] = this.adjustImageSizesHTML(d.afterImage);
+            const afterImgWrap = document.createElement('div');
+            afterImgWrap.className = 'after-img-wrap';
+            afterImgWrap.appendChild(afterImage);
+            Object.assign(cache[this.options.id][i], {
+              afterImgWrap,
+            });
+          }
+          break;
+        case 'video':
+          this.slider.innerHTML = `${d.video}`; // TODO
           break;
         default:
           break;
@@ -158,15 +154,15 @@ export class PinSlider<T> {
     });
 
     // initial setup ------------------
-    cache.sliderWrap.innerHTML === '';
     this.viewSlider();
   }
 
   viewSlider() {
-    cache.sliderWrap.innerHTML === '';
+    // separate this logic into method to activate navigation
+    debugger;
     cache.sliderWrap.append(
-      cache[this.currentIndex].baseImgWrap,
-      cache[this.currentIndex].afterImgWrap,
+      cache[this.options.id][this.currentIndex].baseImgWrap,
+      cache[this.options.id][this.currentIndex].afterImgWrap,
       cache.sliderBtn,
       cache.closeSliderBtn
     );
