@@ -14,7 +14,6 @@ export interface SliderCache extends Partial<IPinSlider> {
   cached: boolean;
 }
 
-
 export type MediaType = 'image' | 'comparison' | 'video'; 
 export type SliderMedia = {
   type: MediaType;

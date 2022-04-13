@@ -1,5 +1,5 @@
 import L from 'leaflet';
-import { SliderCache, SliderMedia } from './types';
+import { MediaType, SliderCache, SliderMedia } from './types';
 /**
  * Cached slider properties for ext functions
  */
@@ -160,12 +160,10 @@ export class PinSlider<T> {
     // initial setup ------------------
     cache.sliderWrap.innerHTML === '';
     this.viewSlider();
-
   }
-  
-  
+
   viewSlider() {
-    // separate this logic into method to activate navigation
+    cache.sliderWrap.innerHTML === '';
     cache.sliderWrap.append(
       cache[this.currentIndex].baseImgWrap,
       cache[this.currentIndex].afterImgWrap,
