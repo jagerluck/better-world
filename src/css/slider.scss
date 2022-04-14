@@ -1,3 +1,4 @@
+@import './mixins.scss';
 $mainColor: rgb(184, 184, 184);
 
 #slider {
@@ -89,6 +90,17 @@ $mainColor: rgb(184, 184, 184);
       line-height: 40px;
     }
   }
+}
+
+.prev-slide-btn {
+  @include arrowBtn;
+  transform: rotate(-225deg);
+  left: 36px;
+}
+.next-slide-btn {
+  @include arrowBtn;
+  transform: rotate(-45deg);
+  right: 36px;
 }
 
 .close-slider-btn {

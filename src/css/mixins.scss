@@ -3,3 +3,16 @@
   justify-content: center;
   align-items: center;
 }
+
+@mixin arrowBtn {
+  display: block;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  box-shadow: rgba(189, 189, 189, 0.7) 5px 5px,
+  rgba(121, 121, 121, 0.5) 8px 8px,
+  rgba(118, 118, 118, 0.3) 11px 11px,
+  rgba(98, 98, 98, 0.1) 14px 14px;
+  transform-origin: center;
+  top: calc(50% - 15px);
+}
