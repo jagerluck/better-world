@@ -77,6 +77,11 @@ export class PinSlider<T extends { data: SliderMedia[] }> {
       const sliderBtn = document.createElement('div');
       const prevSlideBtn = document.createElement('span');
       const nextSlideBtn = document.createElement('span');
+      
+      // TODO: hover over box-shadow
+      // const wrapSlide = document.createElement('div');
+      // wrapSlide.className = 'testing';
+      
       prevSlideBtn.className = 'prev-slide-btn';
       nextSlideBtn.className = 'next-slide-btn';
       sliderWrap.className = 'slider-wrap';
@@ -124,7 +129,6 @@ export class PinSlider<T extends { data: SliderMedia[] }> {
 
   initMedia(data: SliderMedia[]) {
     cache[this.options.id] = {};
-    this.maxIndex = Object.keys(cache[this.options.id]).length;
 
     data.forEach((d: SliderMedia, i) => {
       switch (d.type) {
@@ -157,22 +161,26 @@ export class PinSlider<T extends { data: SliderMedia[] }> {
       }
     });
 
+    this.maxIndex = Object.keys(cache[this.options.id]).length;
     // initial setup ------------------
     this.viewSlide();
   }
 
   nextSlide() {
     const nextIndex = this.currentIndex + 1;
-    this.currentIndex = nextIndex > this.maxIndex ? 0 : nextIndex;
+    this.currentIndex = !cache[this.options.id][nextIndex] ? 0 : nextIndex;
     this.viewSlide();
   }
   prevSlide() {
     const prevIndex = this.currentIndex - 1;
-    this.currentIndex = prevIndex < 0 ? this.maxIndex : prevIndex;
+    this.currentIndex = !cache[this.options.id][prevIndex]
+      ? this.maxIndex - 1
+      : prevIndex;
     this.viewSlide();
   }
 
   viewSlide() {
+    console.log(this.currentIndex, this.maxIndex);
     cache.sliderWrap.innerHTML = '';
     switch (cache[this.options.id][this.currentIndex].type) {
       case 'image':
