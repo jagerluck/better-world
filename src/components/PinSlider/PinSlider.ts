@@ -1,5 +1,7 @@
 import L from 'leaflet';
+import { PlayVideoIcon } from '../../assets';
 import { SliderCache, SliderMedia } from './types';
+
 /**
  * Cached slider properties for ext functions
  */
@@ -22,6 +24,7 @@ export class PinSlider<T extends { data: SliderMedia[] }> {
   isPhone = false;
   // one modify-only slider
   slider = document.getElementById('slider')!;
+  overlay = document.getElementById('overlay');
 
   constructor(_options: T) {
     this.isPhone = window.hasOwnProperty('ontouchstart');
@@ -29,6 +32,10 @@ export class PinSlider<T extends { data: SliderMedia[] }> {
 
     Object.assign(this.options, _options);
     this.slider.style.display = 'flex';
+
+    this.options.map.dragging.disable();
+    this.options.map.doubleClickZoom.disable();
+    this.overlay.style.display = 'block';
 
     this.init();
   }
@@ -45,14 +52,12 @@ export class PinSlider<T extends { data: SliderMedia[] }> {
   }
 
   startSlide(_e: any) {
-    this.options.map.dragging.disable();
     const sliderWrap = cache.sliderWrap;
     this.isPhone
       ? sliderWrap.addEventListener('touchmove', this.moveHandler)
       : sliderWrap.addEventListener('mousemove', this.moveHandler);
   }
   endSlide(_e: any) {
-    this.options.map.dragging.enable();
     const sliderWrap = cache.sliderWrap;
     this.isPhone
       ? sliderWrap.removeEventListener('touchmove', this.moveHandler)
@@ -77,6 +82,11 @@ export class PinSlider<T extends { data: SliderMedia[] }> {
       const sliderBtn = document.createElement('div');
       const prevSlideBtn = document.createElement('span');
       const nextSlideBtn = document.createElement('span');
+
+      // TODO: hover over box-shadow
+      // const wrapSlide = document.createElement('div');
+      // wrapSlide.className = 'testing';
+
       prevSlideBtn.className = 'prev-slide-btn';
       nextSlideBtn.className = 'next-slide-btn';
       sliderWrap.className = 'slider-wrap';
@@ -116,15 +126,16 @@ export class PinSlider<T extends { data: SliderMedia[] }> {
   }
 
   closeSlider() {
-    cache.sliderWrap.innerHTML === '';
+    cache.sliderWrap.replaceChildren(); // removes all nodes, faster than innerHTML = ''
     cache.sliderBtn.style.left = '50%';
     this.slider.style.display = 'none';
     this.options.map.dragging.enable();
+    this.options.map.doubleClickZoom.enable();
+    this.overlay.style.display = 'none';
   }
 
   initMedia(data: SliderMedia[]) {
     cache[this.options.id] = {};
-    this.maxIndex = Object.keys(cache[this.options.id]).length;
 
     data.forEach((d: SliderMedia, i) => {
       switch (d.type) {
@@ -150,12 +161,42 @@ export class PinSlider<T extends { data: SliderMedia[] }> {
           }
           break;
         case 'video':
-          this.slider.innerHTML = `${'d.video'}`; // TODO
+          const videoEl = document.createElement('div');
+          videoEl.innerHTML = `
+            <video
+              id="my-video"
+              class="video-js"
+              controls
+              preload="auto"
+              width="${this.options.sliderWidth}"
+              height="${this.options.sliderHeight}"
+              poster="${PlayVideoIcon}"
+            >
+              <source src="${d.video}"/>
+              <p class="vjs-no-js">
+                To view this video please enable JavaScript, and consider upgrading
+                to a web browser that
+                <a href="https://videojs.com/html5-video-support/" target="_blank">
+                  supports HTML5 video
+                </a>
+              </p>
+            </video>
+          `;
+          cache[this.options.id][i] = {
+            type: d.type,
+            videoEl,
+          };
           break;
         default:
           break;
       }
     });
+
+    this.maxIndex = Object.keys(cache[this.options.id]).length;
+
+    // TODO: add another component to keep still elements
+    // cache.otherComponent.append(cache.closeSliderBtn);
+    // if (this.maxIndex > 0) cache.otherComponent.append(cache.prevSlideBtn, cache.nextSlideBtn);
 
     // initial setup ------------------
     this.viewSlide();
@@ -163,12 +204,14 @@ export class PinSlider<T extends { data: SliderMedia[] }> {
 
   nextSlide() {
     const nextIndex = this.currentIndex + 1;
-    this.currentIndex = nextIndex > this.maxIndex ? 0 : nextIndex;
+    this.currentIndex = !cache[this.options.id][nextIndex] ? 0 : nextIndex;
     this.viewSlide();
   }
   prevSlide() {
     const prevIndex = this.currentIndex - 1;
-    this.currentIndex = prevIndex < 0 ? this.maxIndex : prevIndex;
+    this.currentIndex = !cache[this.options.id][prevIndex]
+      ? this.maxIndex - 1
+      : prevIndex;
     this.viewSlide();
   }
 
@@ -194,10 +237,15 @@ export class PinSlider<T extends { data: SliderMedia[] }> {
         );
         break;
       case 'video':
+        cache.sliderWrap.append(
+          cache[this.options.id][this.currentIndex].videoEl,
+          cache.prevSlideBtn,
+          cache.nextSlideBtn,
+          cache.closeSliderBtn
+        );
+        break;
     }
   }
-
-  setupVideoPlayer() {}
 
   adjustImageSizesHTML(...srcs: string[]) {
     return srcs.map((src) => {
