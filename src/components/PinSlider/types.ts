@@ -7,6 +7,7 @@ export interface IPinSlider {
   closeSliderBtn: HTMLElement;
   baseImage: HTMLImageElement;
   afterImage: HTMLImageElement;
+  videoEl: HTMLVideoElement;
   prevSlideBtn: HTMLImageElement;
   nextSlideBtn: HTMLImageElement;
 }

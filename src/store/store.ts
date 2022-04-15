@@ -40,6 +40,11 @@ export class Store {
           baseImage:
             'https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&w=1000&q=80',
         },
+        {
+          type: 'video',
+          video:
+            'https://lamberta.github.io/html5-animation/examples/ch04/assets/movieclip.mp4',
+        },
       ],
       map: Store.map,
       line: true,
