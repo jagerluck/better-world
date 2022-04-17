@@ -17,6 +17,7 @@
     "sourceMap": true,
     "experimentalDecorators": true,
     "isolatedModules": true,
+    // "esModuleInterop": true,
     "strictNullChecks": false, // TODO: revisit. need to omit these checks in only some files not everywhere
     "noEmitHelpers": true,
     "resolveJsonModule": true,
