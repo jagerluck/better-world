@@ -9,9 +9,12 @@ import 'webpack-dev-server';
 const config: webpack.Configuration = {
   mode: 'development',
   context: __dirname,
-  entry: './src/app.ts',
+  entry: {
+    map: './src/map.ts',
+    admin: './src/map.ts',
+  },
   output: {
-    filename: 'app.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
   },
   resolve: {
@@ -55,16 +58,19 @@ const config: webpack.Configuration = {
       },
     ],
   },
+  // @ts-ignore
   plugins: [
-    new HtmlWebpackPlugin({
-      template: `${__dirname}/src/index.html`,
-      filename: 'index.html',
-      inject: 'body',
-    }),
     new Dotenv(),
     //@ts-ignore
     new ProgressBarPlugin(),
-  ],
+    // what with styles,
+  ].concat(['map', 'admin'].map((name) => {
+    return new HtmlWebpackPlugin({
+      template: `${__dirname}/src/${name}.html`,
+      filename: `${name}.html`,
+      chunks: [`${name}.js`],
+    });
+  })),
   devServer: {
     hot: true,
     port: 3000,

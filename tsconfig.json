@@ -21,7 +21,8 @@
     "noEmitHelpers": true,
     "resolveJsonModule": true,
     "types": [
-      "node"
+      "node",
+      "jquery",
     ],
     "typeRoots": [
       "node_modules/@types"
