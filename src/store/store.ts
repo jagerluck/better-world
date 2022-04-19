@@ -9,8 +9,8 @@ export class Store {
   static map: L.Map;
 
   constructor() {
-    // Create the Leaflet map with a generic start point
     if (!Store.map) {
+      // entry point for the map
       Store.map = L.map(mapId, {
         center: [49, 33],
         zoom: 6,
